@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class CPlayer : MonoBehaviour {
    public float lerpTime;
-   public float currentLerpTime;
-   public float percent=1;
+   float currentLerpTime;
+   float percent=1;
 
     Vector3 startPos;
     Vector3 endPos;
     bool firstInput;
-
+    [HideInInspector]
     public bool _jump;
 
     private void Start()
@@ -24,7 +24,6 @@ public class CPlayer : MonoBehaviour {
             if (percent==1 && gameObject.transform.position == endPos)
             {                
                 _jump = true;
-                lerpTime = 0.5f;
                 currentLerpTime = 0;
                 firstInput = true;
                 startPos = gameObject.transform.position;
@@ -35,22 +34,22 @@ public class CPlayer : MonoBehaviour {
 
         if (gameObject.transform.position==endPos)
         {
-            if (Input.GetKeyDown(KeyCode.D))
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 endPos = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
                 transform.eulerAngles = new Vector3(0, 90, 0);
             }
-            else if (Input.GetKeyDown(KeyCode.A))
+            else if (Input.GetKeyDown(KeyCode.S))
             {
                 endPos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
                 transform.eulerAngles = new Vector3(0, -90, 0);
             }
-            else if (Input.GetKeyDown(KeyCode.W))
+            else if (Input.GetKeyDown(KeyCode.A))
             {
                 endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
                 transform.eulerAngles = new Vector3(0, 0, 0);
             }
-            else if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.D))
             {
                 endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
                 transform.eulerAngles = new Vector3(0, 180, 0);
