@@ -15,11 +15,15 @@ public class CPlayer : MonoBehaviour {
     public float minVelJump;
     private float startLerpTime;
     int cantJumps;
-    float cdJumps=1f;
+    float cdJumps=0.5f;
     float timer;
-
+    Animator anim;
+    float animSpeed;
+ 
     private void Start()
     {
+        anim = GetComponentInChildren<Animator>();
+        animSpeed = anim.speed;
         startLerpTime = lerpTime;
         endPos = gameObject.transform.position;
     }
@@ -33,15 +37,18 @@ public class CPlayer : MonoBehaviour {
             {
                 cantJumps = 0;
                 lerpTime = startLerpTime;
+                anim.speed = 1;
             }
             timer = 0;
             cantJumps++;
 
             if (cantJumps>=4)
             {
-                if (lerpTime/2>= minVelJump)
+                if (lerpTime/1.5f>= minVelJump)
                 {
+                    anim.speed *= 2;
                     lerpTime /= 1.5f;
+                   
                 }
                 
                 gameObject.transform.position = endPos;
