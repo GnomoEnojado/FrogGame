@@ -12,13 +12,14 @@ public class CPlayerAnimation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (_player._jump)
+     
+        if (_player._preJump)
         {
-            anim.SetBool("Jump", true);
+            anim.SetBool("Prejump", true);
         }
         else
         {
-            anim.SetBool("Jump", false);
+            anim.SetBool("Prejump", false);
         }
 	}
    
