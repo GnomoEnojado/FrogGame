@@ -10,7 +10,7 @@ public class CPlayer : MonoBehaviour {
 	bool correctPosition;
 
 	Vector3 startPos;
-    Vector3 endPos;
+    public Vector3 endPos;
     bool firstInput;
     [HideInInspector]
     public bool _preJump;
@@ -20,8 +20,9 @@ public class CPlayer : MonoBehaviour {
     float cdJumps=0.5f;
     float timer;
     Animator anim;
+    bool canJump;
+    public bool canSpeedJump=true;
 
- 
     private void Start()
     {
         anim = GetComponentInChildren<Animator>();
@@ -33,7 +34,7 @@ public class CPlayer : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         timer += Time.deltaTime;
-
+ 
 
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -52,66 +53,67 @@ public class CPlayer : MonoBehaviour {
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
-        if (gameObject.transform.position==endPos)
+     
+   
+        if (canJump)
         {
-			if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
-			{
-				firstInput = true;
-				_preJump = true;
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            {
+                firstInput = true;
+                _preJump = true;
 
-				
-			}
-          
-            if (Input.GetKeyUp(KeyCode.A)|| Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S))
-			{
-				time=0;
-				_preJump = false;
+
+            }
+
+            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S))
+            {
+                startPos = transform.position;
+                canJump = false;
+                time = 0;
+                _preJump = false;
                 correctPosition = false;
-                if (timer>=cdJumps)
-				{
-					cantJumps = 0;
-					timeToDestiny = startDestinyTime;
-					anim.speed = 1;
-				}
-				timer = 0;
-				cantJumps++;
+                if (timer >= cdJumps || !canSpeedJump)
+                {
+                    cantJumps = 0;
+                    timeToDestiny = startDestinyTime;
+                    anim.speed = 1;
+                }
+                timer = 0;
+                cantJumps++;
 
-				if (cantJumps>=3)
-				{
-					if (timeToDestiny/1.5f>= minVelJump)
-					{
-						timeToDestiny /= 1.5f;
+                if (cantJumps >= 3 && canSpeedJump)
+                {
+                    if (timeToDestiny / 1.5f >= minVelJump)
+                    {
+                        timeToDestiny /= 1.5f;
 
-					}
+                    }
 
-					cantJumps = 0;
-				}
-				if (Input.GetKeyUp(KeyCode.W))
-				{
-					endPos = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
+                    cantJumps = 0;
+                }
+                if (Input.GetKeyUp(KeyCode.W))
+                {
+                    endPos = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
 
-				}
-				else if (Input.GetKeyUp(KeyCode.S))
-				{
-					endPos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
+                }
+                else if (Input.GetKeyUp(KeyCode.S))
+                {
+                    endPos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
 
-				}
-				else if (Input.GetKeyUp(KeyCode.A))
-				{
-					endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
+                }
+                else if (Input.GetKeyUp(KeyCode.A))
+                {
+                    endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
 
-				}
-				else if (Input.GetKeyUp(KeyCode.D))
-				{
-					endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
+                }
+                else if (Input.GetKeyUp(KeyCode.D))
+                {
+                    endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
 
-				}
+                }
 
-			}
-          
-         
+            }
         }
-
 			time += Time.deltaTime;
 
 			if (time < timeToDestiny) {
@@ -125,9 +127,10 @@ public class CPlayer : MonoBehaviour {
 				if(!correctPosition)
 				{
 					gameObject.transform.position = new Vector3 (Mathf.Round (transform.position.x),Mathf.Round (transform.position.y),Mathf.Round (transform.position.z));
-					startPos = transform.position;
+                    endPos = transform.position;
                     correctPosition = true;
-				}
+                    canJump = true;
+            }
 			}
 
 

@@ -66,22 +66,42 @@ public class Water : MonoBehaviour {
             }
         }
 	}
-
-    private void OnCollisionEnter(Collision other)
+    private bool IsInList(GameObject aObject)
+    {
+        for (int i = 0; i < objectsToMove.Count; i++)
+        {
+            if (objectsToMove[i].gameObject==aObject)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private void OnTriggerStay(Collider other)
     {
         if (other.transform.tag == "Player" || other.transform.tag == "ObjectToMoveInWater")
         {
-            objectsToMove.Add(other.transform);
+            if (!IsInList(other.gameObject))
+            {
+                objectsToMove.Add(other.transform);
+            }
+            if (other.transform.tag == "Player")
+            {
+                other.GetComponent<CPlayer>().canSpeedJump = false;
+            }
         }
     }
   
 
-    private void OnCollisionExit(Collision other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.transform.tag == "Player" || other.transform.tag == "ObjectToMoveInWater")
         {
             objectsToMove.Remove(other.transform);
-      
+            if (other.transform.tag == "Player")
+            {
+                other.GetComponent<CPlayer>().canSpeedJump = true;
+            }
         }
     }
    

@@ -11,10 +11,12 @@ public class CFollowCamera : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
-        Vector3 desiredPosition = target.position - offSet;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position,desiredPosition,smoothSpeed);
-        transform.position = smoothedPosition;
-
+        if (target!=null)
+        {
+            Vector3 desiredPosition = target.position - offSet;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = smoothedPosition;
+        }
 
 	}
 }

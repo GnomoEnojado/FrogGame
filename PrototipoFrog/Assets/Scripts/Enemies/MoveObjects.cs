@@ -23,4 +23,11 @@ public class MoveObjects : MonoBehaviour {
             other.transform.parent = gameObject.transform;
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            other.transform.parent = null;
+        }
+    }
 }
